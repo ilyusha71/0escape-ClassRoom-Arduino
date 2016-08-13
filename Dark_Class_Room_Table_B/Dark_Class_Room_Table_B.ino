@@ -1,8 +1,8 @@
 /******************************************
-  Title: Ghost Class Room A
+  Title: Dark Class Room - Table B
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/10
+  2016/08/13
 *******************************************/
 /******************************************
   PURPOSE:  Learn to use the MF522-AN RFID card reader
@@ -30,10 +30,15 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);        // instatiate a MFRC522 reader object.
 MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hold the card information
 /* Constant for Chair Tag ID */
-const int RFID_A[4] = {60, 73, 49, 0}; // A椅腳 RFID Tag 3C49310
-const int RFID_B[4] = {68, 151, 230, 233}; // B椅腳 RFID Tag 4497E6E9
+#define SHOW_TAG_ID
+const int RFID_A[4] = {64, 115, 28, 51}; // A椅腳 RFID Tag 40731C33
+const int RFID_B[4] = {207, 249, 47, 0}; // B椅腳 RFID Tag CFF92F0
 const int RFID_C[4] = {112, 186, 28, 51}; // C椅腳 RFID Tag 70BA1C33
-const int RFID_D[4] = {64, 70, 44, 51}; // D椅腳 RFID Tag 40462C33
+const int RFID_D[4] = {31, 71, 51, 0}; // D椅腳 RFID Tag 2547330
+const int RFID_W[4] = {79, 179, 52, 0}; // 萬用W椅腳 RFID Tag 4FB3340
+const int RFID_X[4] = {27, 79, 50, 0}; // 萬用X椅腳 RFID Tag 1B4F320
+const int RFID_Y[4] = {160, 59, 44, 51}; // 萬用Y椅腳 RFID Tag A03B2C33
+const int RFID_Z[4] = {235, 12, 49, 0}; // 萬用Z椅腳 RFID Tag EBC310
 /* Output */
 const int switchX = 2;
 const int switchY = 3;
@@ -58,7 +63,7 @@ void setup() {
   pinMode(switchY, OUTPUT);
   digitalWrite(switchX, LOW);
   digitalWrite(switchY, LOW);
-  Serial.println("Ghost Class Room Dark C 2016/08/10 iLYuSha Wakaka KocmocA");
+  Serial.println("Dark Class Room - Table B 2016/08/13 iLYuSha Wakaka KocmocA");
 }
 
 int block = 2; //this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
@@ -67,36 +72,87 @@ byte blockcontent[16] = {"makecourse_____"};//an array with 16 bytes to be writt
 //byte blockcontent[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//all zeros. This can be used to delete a block.
 byte readbackblock[18];//This array is used for reading out a block. The MIFARE_Read method requires a buffer that is at least 18 bytes to hold the 16 bytes of a block.
 
+void ShowTagID()
+{
+  #ifdef SHOW_TAG_ID
+  Serial.print("Tag ID: ");
+  Serial.print(mfrc522.uid.uidByte[0]);
+  Serial.print(" , ");
+  Serial.print(mfrc522.uid.uidByte[1]);
+  Serial.print(" , ");
+  Serial.print(mfrc522.uid.uidByte[2]);
+  Serial.print(" , ");
+  Serial.println(mfrc522.uid.uidByte[3]);
+  #endif
+}
 void loop()
 {
-  // C椅子 放 C位置 觸發
-  if (mfrc522.uid.uidByte[0] == RFID_C[0] && mfrc522.uid.uidByte[1] == RFID_C[1] && mfrc522.uid.uidByte[2] == RFID_C[2] && mfrc522.uid.uidByte[3] == RFID_C[3])
+  if(escape == -1)
   {
-    digitalWrite(switchX, HIGH);
-  }
-  
-  // D椅子 放 C位置 觸發
-  else if (mfrc522.uid.uidByte[0] == RFID_D[0] && mfrc522.uid.uidByte[1] == RFID_D[1] && mfrc522.uid.uidByte[2] == RFID_D[2] && mfrc522.uid.uidByte[3] == RFID_D[3])
-  {
-    digitalWrite(switchY, HIGH);
-  }
-  
-  // 椅子拿起來 -> 恢復訊號
-  else
-  {
-    if(escape > 1)
+    ShowTagID();
+    
+    // A椅子 放 B位置 觸發
+    if (mfrc522.uid.uidByte[0] == RFID_A[0] && mfrc522.uid.uidByte[1] == RFID_A[1] && mfrc522.uid.uidByte[2] == RFID_A[2] && mfrc522.uid.uidByte[3] == RFID_A[3])
     {
-      digitalWrite(switchX, LOW);
-      digitalWrite(switchY, LOW);
+      digitalWrite(switchY, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
+    }
+    
+    // B椅子 放 B位置 觸發
+    else if (mfrc522.uid.uidByte[0] == RFID_B[0] && mfrc522.uid.uidByte[1] == RFID_B[1] && mfrc522.uid.uidByte[2] == RFID_B[2] && mfrc522.uid.uidByte[3] == RFID_B[3])
+    {
+      digitalWrite(switchX, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
+    }
+  
+    // 萬用椅子作弊
+    else if (mfrc522.uid.uidByte[0] == RFID_W[0] && mfrc522.uid.uidByte[1] == RFID_W[1] && mfrc522.uid.uidByte[2] == RFID_W[2] && mfrc522.uid.uidByte[3] == RFID_W[3])
+    {
+      digitalWrite(switchX, HIGH);
+      digitalWrite(switchY, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_X[0] && mfrc522.uid.uidByte[1] == RFID_X[1] && mfrc522.uid.uidByte[2] == RFID_X[2] && mfrc522.uid.uidByte[3] == RFID_X[3])
+    {
+      digitalWrite(switchX, HIGH);
+      digitalWrite(switchY, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_Y[0] && mfrc522.uid.uidByte[1] == RFID_Y[1] && mfrc522.uid.uidByte[2] == RFID_Y[2] && mfrc522.uid.uidByte[3] == RFID_Y[3])
+    {
+      digitalWrite(switchX, HIGH);
+      digitalWrite(switchY, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_Z[0] && mfrc522.uid.uidByte[1] == RFID_Z[1] && mfrc522.uid.uidByte[2] == RFID_Z[2] && mfrc522.uid.uidByte[3] == RFID_Z[3])
+    {
+      digitalWrite(switchX, HIGH);
+      digitalWrite(switchY, HIGH);
+      Serial.print("Bingo ");
+      ShowTagID();
     }
   }
 
-  mfrc522.uid.uidByte[0] = -2;
-  mfrc522.uid.uidByte[1] = -2;
-  mfrc522.uid.uidByte[2] = -2;
-  mfrc522.uid.uidByte[3] = -2;
-
-
+  /********************************************* 
+   *  Important!!! escape每次迴圈都會+1
+   *  Arduino RFID 第一次進入迴圈會確認Tag並讀取(escape = -1)
+   *  Arduino RFID 第二次進入迴圈【一定】會return跳出(escape = 0)
+   *  故判斷Tag離開會在第三次進入迴圈
+   *  此時如果Tag仍留著，escape = -1
+   *  反之，escape = 1
+   *  所以第四次迴圈判斷條件如下
+  **********************************************/
+  // 椅子拿起來 -> 恢復訊號
+  else if(escape > 0)
+  {
+    digitalWrite(switchX, LOW);
+    digitalWrite(switchY, LOW);
+  }
   /*****************************************establishing contact with a tag/card**********************************************************************/
 
   // Look for new cards (in case you wonder what PICC means: proximity integrated circuit card)
@@ -104,7 +160,7 @@ void loop()
     escape++;
     return;//if it did not find a new card is returns a '0' and we return to the start of the loop
   }
-  escape = 0;
+  escape = -1;
 
   // Select one of the cards
   if ( ! mfrc522.PICC_ReadCardSerial()) {//if PICC_ReadCardSerial returns 1, the "uid" struct (see MFRC522.h lines 238-45)) contains the ID of the read card.
@@ -121,7 +177,7 @@ void loop()
   //byte    sak;      // The SAK (Select acknowledge) byte returned from the PICC after successful selection.
   //} Uid;
 
-  Serial.println("card selected");
+  //Serial.println("card selected");
 
   /*****************************************writing and reading a block on the card**********************************************************************/
 
