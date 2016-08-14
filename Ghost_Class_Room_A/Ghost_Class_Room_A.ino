@@ -34,6 +34,10 @@ const int RFID_A[4] = {60, 73, 49, 0}; // A椅腳 RFID Tag 李嬅 3C49310
 const int RFID_B[4] = {68, 151, 230, 233}; // B椅腳 RFID Tag 佳倫 4497E6E9
 const int RFID_C[4] = {112, 186, 28, 51}; // C椅腳 RFID Tag 王廷 70BA1C33
 const int RFID_D[4] = {64, 70, 44, 51}; // D椅腳 RFID Tag 廖毛 40462C33
+const int RFID_W[4] = {79, 179, 52, 0}; // 萬用W椅腳 RFID Tag 4FB3340
+const int RFID_X[4] = {27, 79, 50, 0}; // 萬用X椅腳 RFID Tag 1B4F320
+const int RFID_Y[4] = {160, 59, 44, 51}; // 萬用Y椅腳 RFID Tag A03B2C33
+const int RFID_Z[4] = {235, 12, 49, 0}; // 萬用Z椅腳 RFID Tag EBC310
 /* Output */
 const int teacherDoor = 2; // 教職員門
 const int secretDoor = 3; // 暗門
