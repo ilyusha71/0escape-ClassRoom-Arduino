@@ -32,7 +32,7 @@ int valueChairC2 = 0;
 int valueChairD1 = 0;
 int valueChairD2 = 0;
 int turn = 0; // 已完成輪數
-const float durationTurn = 13.0f;
+const int durationTurn = 13000;
 unsigned long timerOut; // 延遲結束時間
 
 void setup() {
@@ -58,29 +58,39 @@ void setup() {
 void Replay()
 {
   if(millis() > timerOut && turn > 0 && turn < 4)
+    Play();
+}
+void Play()
+{
+  timerOut = millis() + durationTurn;
+  if(turn == 1)
   {
-    timerOut = millis() + durationTurn;
-    if(turn == 1)
-    {
-      digitalWrite(x1,HIGH);
-      delay(300);
-      digitalWrite(x1,LOW);
-    }
-    else if(turn == 2)
-    {
-      digitalWrite(y1,HIGH);
-      delay(300);
-      digitalWrite(y1,LOW);
-    }
-    else if(turn == 3)
-    {
-      digitalWrite(x2,HIGH);
-      delay(300);
-      digitalWrite(x2,LOW);
-    }
+    digitalWrite(x1,HIGH);
+    delay(300);
+    digitalWrite(x1,LOW);
+  }
+  else if(turn == 2)
+  {
+    digitalWrite(y1,HIGH);
+    delay(300);
+    digitalWrite(y1,LOW);
+  }
+  else if(turn == 3)
+  {
+    digitalWrite(x2,HIGH);
+    delay(300);
+    digitalWrite(x2,LOW);
   }
 }
 void loop() {
+//  char tt = Serial.read();
+//  if(tt == 'c')
+//  {
+//    turn++;
+//    Serial.println("is ");
+//    Serial.println(turn);
+//    Play();
+//  }
 
   valueChairA1 = digitalRead(chairA1);
   valueChairA2 = digitalRead(chairA2);
@@ -91,17 +101,26 @@ void loop() {
   valueChairD1 = digitalRead(chairD1);
   valueChairD2 = digitalRead(chairD2);
 
-  if(valueChairA1 == 1 && valueChairB1 == 1 && valueChairC1 == 1 && valueChairD1 == 1)
+  if(turn == 0 || turn == 2)
   {
-    if(turn == 0 || turn == 2)
+    if(valueChairA1 == 1 && valueChairB1 == 1 && valueChairC1 == 1 && valueChairD1 == 1)
+    {
       turn++;
+      Play();
+    }
   }
-  else if(valueChairA2 == 1 && valueChairB2 == 1 && valueChairC2 == 1 && valueChairD2 == 1)
+  else if(turn == 1)
   {
-    if(turn == 1)
+    if(valueChairA2 == 1 && valueChairB2 == 1 && valueChairC2 == 1 && valueChairD2 == 1)
+    {
       turn++;
-    else if(turn == 3)
-    {     
+      Play();
+    }
+  }
+  else if(turn == 3)
+  {
+    if(valueChairA2 == 1 && valueChairB2 == 1 && valueChairC2 == 1 && valueChairD2 == 1)
+    {
       turn++;
       digitalWrite(y2,LOW);
     }
