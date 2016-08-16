@@ -2,7 +2,7 @@
   Title: Passage Turnstile Controller
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/14
+  2016/08/16
 *******************************************/
 /* Input */
 const int wallJ = 2;
@@ -23,7 +23,7 @@ void setup() {
   pinMode(sound,OUTPUT);
   digitalWrite(turnstile,HIGH);
   digitalWrite(sound,HIGH);
-  Serial.println("Passage Turnstile Controller 2016/08/14 iLYuSha Wakaka KocmocA");
+  Serial.println("Passage Turnstile Controller 2016/08/16 iLYuSha Wakaka KocmocA");
 }
 void loop() {
 

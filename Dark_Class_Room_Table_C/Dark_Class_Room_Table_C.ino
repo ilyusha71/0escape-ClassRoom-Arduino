@@ -2,7 +2,7 @@
   Title: Dark Class Room - Table C
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/13
+  2016/08/16
 *******************************************/
 /******************************************
   PURPOSE:  Learn to use the MF522-AN RFID card reader
@@ -34,7 +34,7 @@ MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hol
 const int RFID_A[4] = {64, 115, 28, 51}; // A椅腳 RFID Tag 40731C33
 const int RFID_B[4] = {207, 249, 47, 0}; // B椅腳 RFID Tag CFF92F0
 const int RFID_C[4] = {112, 186, 28, 51}; // C椅腳 RFID Tag 70BA1C33
-const int RFID_D[4] = {31, 71, 51, 0}; // D椅腳 RFID Tag 2547330
+const int RFID_D[4] = {37, 71, 51, 0}; // D椅腳 RFID Tag 2547330
 const int RFID_W[4] = {79, 179, 52, 0}; // 萬用W椅腳 RFID Tag 4FB3340
 const int RFID_X[4] = {27, 79, 50, 0}; // 萬用X椅腳 RFID Tag 1B4F320
 const int RFID_Y[4] = {160, 59, 44, 51}; // 萬用Y椅腳 RFID Tag A03B2C33
@@ -63,7 +63,7 @@ void setup() {
   pinMode(switchY, OUTPUT);
   digitalWrite(switchX, LOW);
   digitalWrite(switchY, LOW);
-  Serial.println("Dark Class Room - Table C 2016/08/13 iLYuSha Wakaka KocmocA");
+  Serial.println("Dark Class Room - Table C 2016/08/16 iLYuSha Wakaka KocmocA");
 }
 
 int block = 2; //this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
@@ -95,7 +95,7 @@ void loop()
     if (mfrc522.uid.uidByte[0] == RFID_C[0] && mfrc522.uid.uidByte[1] == RFID_C[1] && mfrc522.uid.uidByte[2] == RFID_C[2] && mfrc522.uid.uidByte[3] == RFID_C[3])
     {
       digitalWrite(switchX, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("X Bingo ");
       ShowTagID();
     }
     
@@ -103,7 +103,7 @@ void loop()
     else if (mfrc522.uid.uidByte[0] == RFID_D[0] && mfrc522.uid.uidByte[1] == RFID_D[1] && mfrc522.uid.uidByte[2] == RFID_D[2] && mfrc522.uid.uidByte[3] == RFID_D[3])
     {
       digitalWrite(switchY, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("Y Bingo ");
       ShowTagID();
     }
   
@@ -112,28 +112,28 @@ void loop()
     {
       digitalWrite(switchX, HIGH);
       digitalWrite(switchY, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("Cheat W Bingo ");
       ShowTagID();
     }
     else if (mfrc522.uid.uidByte[0] == RFID_X[0] && mfrc522.uid.uidByte[1] == RFID_X[1] && mfrc522.uid.uidByte[2] == RFID_X[2] && mfrc522.uid.uidByte[3] == RFID_X[3])
     {
       digitalWrite(switchX, HIGH);
       digitalWrite(switchY, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("Cheat X Bingo ");
       ShowTagID();
     }
     else if (mfrc522.uid.uidByte[0] == RFID_Y[0] && mfrc522.uid.uidByte[1] == RFID_Y[1] && mfrc522.uid.uidByte[2] == RFID_Y[2] && mfrc522.uid.uidByte[3] == RFID_Y[3])
     {
       digitalWrite(switchX, HIGH);
       digitalWrite(switchY, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("Cheat Y Bingo ");
       ShowTagID();
     }
     else if (mfrc522.uid.uidByte[0] == RFID_Z[0] && mfrc522.uid.uidByte[1] == RFID_Z[1] && mfrc522.uid.uidByte[2] == RFID_Z[2] && mfrc522.uid.uidByte[3] == RFID_Z[3])
     {
       digitalWrite(switchX, HIGH);
       digitalWrite(switchY, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("Cheat Z Bingo ");
       ShowTagID();
     }
   }
