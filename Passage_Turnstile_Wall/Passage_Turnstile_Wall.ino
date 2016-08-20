@@ -1,8 +1,8 @@
 /******************************************
-  Title: Passage Turnstile - Wall K
+  Title: Passage Turnstile - Wall
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/14
+  2016/08/20
 *******************************************/
 /******************************************
   PURPOSE:  Learn to use the MF522-AN RFID card reader
@@ -31,7 +31,8 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);        // instatiate a MFRC522 reader object.
 MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hold the card information
 /* Constant for Chair Tag ID */
 #define SHOW_TAG_ID
-const int RFID_Tag[4] = {85, 55, 209, 101}; // RFID Tag 6428BDEB
+const int RFID_J[4] = {178, 24, 52, 0}; // RFID Tag B218340
+const int RFID_K[4] = {42, 7, 189, 16}; // RFID Tag 2A7BD10
 /* Output */
 const int pass = 2;
 /* Variable */
@@ -53,7 +54,7 @@ void setup() {
 
   pinMode(pass, OUTPUT);
   digitalWrite(pass, LOW);
-  Serial.println("Passage Turnstile - Wall K 2016/08/14 iLYuSha Wakaka KocmocA");
+  Serial.println("Passage Turnstile - Wall 2016/08/20 iLYuSha Wakaka KocmocA");
 }
 
 int block = 2; //this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
@@ -81,10 +82,16 @@ void loop()
   {
     ShowTagID();
     
-    if (mfrc522.uid.uidByte[0] == RFID_Tag[0] && mfrc522.uid.uidByte[1] == RFID_Tag[1] && mfrc522.uid.uidByte[2] == RFID_Tag[2] && mfrc522.uid.uidByte[3] == RFID_Tag[3])
+    if (mfrc522.uid.uidByte[0] == RFID_J[0] && mfrc522.uid.uidByte[1] == RFID_J[1] && mfrc522.uid.uidByte[2] == RFID_J[2] && mfrc522.uid.uidByte[3] == RFID_J[3])
     {
       digitalWrite(pass, HIGH);
-      Serial.print("Bingo ");
+      Serial.print("J Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_K[0] && mfrc522.uid.uidByte[1] == RFID_K[1] && mfrc522.uid.uidByte[2] == RFID_K[2] && mfrc522.uid.uidByte[3] == RFID_K[3])
+    {
+      digitalWrite(pass, HIGH);
+      Serial.print("K Bingo ");
       ShowTagID();
     }
   }
