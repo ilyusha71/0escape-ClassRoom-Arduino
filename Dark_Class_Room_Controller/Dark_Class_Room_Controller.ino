@@ -2,7 +2,7 @@
   Title: Dark Class Room Controller
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/14
+  2016/08/21
 *******************************************/
 /* Input */
 const int chairA1 = 4; // A桌X訊號
@@ -32,19 +32,19 @@ int valueChairC2 = 0;
 int valueChairD1 = 0;
 int valueChairD2 = 0;
 int turn = 0; // 已完成輪數
-const int durationTurn = 13000;
+int durationTurn = 30000;
 unsigned long timerOut; // 延遲結束時間
 
 void setup() {
   Serial.begin(9600);
-  pinMode(valueChairA1,INPUT);
-  pinMode(valueChairA2,INPUT);
-  pinMode(valueChairB1,INPUT);
-  pinMode(valueChairB2,INPUT);
-  pinMode(valueChairC1,INPUT);
-  pinMode(valueChairC2,INPUT);
-  pinMode(valueChairD1,INPUT);
-  pinMode(valueChairD2,INPUT);
+  pinMode(chairA1,INPUT);
+  pinMode(chairA2,INPUT);
+  pinMode(chairB1,INPUT);
+  pinMode(chairB2,INPUT);
+  pinMode(chairC1,INPUT);
+  pinMode(chairC2,INPUT);
+  pinMode(chairD1,INPUT);
+  pinMode(chairD2,INPUT);
   pinMode(x1,OUTPUT);
   pinMode(x2,OUTPUT);
   pinMode(y1,OUTPUT);
@@ -53,7 +53,7 @@ void setup() {
   digitalWrite(x2,HIGH);
   digitalWrite(y1,HIGH);
   digitalWrite(y2,HIGH);
-  Serial.println("Dark Class Room Controller 2016/08/14 iLYuSha Wakaka KocmocA");
+  Serial.println("Dark Class Room Controller 2016/08/21 iLYuSha Wakaka KocmocA");
 }
 void Replay()
 {
@@ -62,35 +62,45 @@ void Replay()
 }
 void Play()
 {
-  timerOut = millis() + durationTurn;
+  timerOut = millis() + 20000;
+  Serial.println(timerOut);
   if(turn == 1)
   {
     digitalWrite(x1,HIGH);
     delay(300);
     digitalWrite(x1,LOW);
+    Serial.println("0001: ");
   }
   else if(turn == 2)
   {
     digitalWrite(y1,HIGH);
     delay(300);
     digitalWrite(y1,LOW);
+    Serial.println("0002: ");
   }
   else if(turn == 3)
   {
     digitalWrite(x2,HIGH);
     delay(300);
     digitalWrite(x2,LOW);
+    Serial.println("0003: ");
   }
 }
 void loop() {
-//  char tt = Serial.read();
-//  if(tt == 'c')
-//  {
-//    turn++;
-//    Serial.println("is ");
-//    Serial.println(turn);
-//    Play();
-//  }
+  char tt = Serial.read();
+  if(tt == 'c')
+  {
+    turn++;
+    Serial.println("is ");
+    Serial.println(turn);
+    Play();
+  }
+  else   if(tt == 'd')
+  {
+    Serial.println("is ");
+    Serial.println(turn);
+    Play();
+  }
 
   valueChairA1 = digitalRead(chairA1);
   valueChairA2 = digitalRead(chairA2);
@@ -100,7 +110,30 @@ void loop() {
   valueChairC2 = digitalRead(chairC2);
   valueChairD1 = digitalRead(chairD1);
   valueChairD2 = digitalRead(chairD2);
-
+//  Serial.print("A1: ");
+//  Serial.print(valueChairA1);
+//  Serial.print("   ");
+//  Serial.print("B1: ");
+//  Serial.print(valueChairB1);
+//  Serial.print("   ");
+//  Serial.print("C1: ");
+//  Serial.print(valueChairC1);
+//  Serial.print("   ");
+//  Serial.print("D1: ");
+//  Serial.print(valueChairD1);
+//  Serial.print("   ");
+//  Serial.print("A2: ");
+//  Serial.print(valueChairA2);
+//  Serial.print("   ");
+//  Serial.print("B2: ");
+//  Serial.print(valueChairB2);
+//  Serial.print("   ");
+//  Serial.print("C2: ");
+//  Serial.print(valueChairC2);
+//  Serial.print("   ");
+//  Serial.print("D2: ");
+//  Serial.print(valueChairD2);
+//  Serial.println("   ");
   if(turn == 0 || turn == 2)
   {
     if(valueChairA1 == 1 && valueChairB1 == 1 && valueChairC1 == 1 && valueChairD1 == 1)
@@ -123,6 +156,7 @@ void loop() {
     {
       turn++;
       digitalWrite(y2,LOW);
+      Serial.println("0004: ");
     }
   }
   Replay();

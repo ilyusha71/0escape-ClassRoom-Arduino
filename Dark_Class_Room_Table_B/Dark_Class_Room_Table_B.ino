@@ -2,7 +2,7 @@
   Title: Dark Class Room - Table B
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/16
+  2016/08/21
 *******************************************/
 /******************************************
   PURPOSE:  Learn to use the MF522-AN RFID card reader
@@ -32,9 +32,9 @@ MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hol
 /* Constant for Chair Tag ID */
 #define SHOW_TAG_ID
 const int RFID_A[4] = {64, 115, 28, 51}; // A椅腳 RFID Tag 40731C33
-const int RFID_B[4] = {207, 249, 47, 0}; // B椅腳 RFID Tag CFF92F0
+const int RFID_B[4] = {37, 71, 51, 0}; // B椅腳 RFID Tag 2547330
 const int RFID_C[4] = {112, 186, 28, 51}; // C椅腳 RFID Tag 70BA1C33
-const int RFID_D[4] = {37, 71, 51, 0}; // D椅腳 RFID Tag 2547330
+const int RFID_D[4] = {69, 10, 205, 101}; // D椅腳 RFID Tag 45ACD65
 const int RFID_W[4] = {79, 179, 52, 0}; // 萬用W椅腳 RFID Tag 4FB3340
 const int RFID_X[4] = {27, 79, 50, 0}; // 萬用X椅腳 RFID Tag 1B4F320
 const int RFID_Y[4] = {160, 59, 44, 51}; // 萬用Y椅腳 RFID Tag A03B2C33
@@ -63,7 +63,7 @@ void setup() {
   pinMode(switchY, OUTPUT);
   digitalWrite(switchX, LOW);
   digitalWrite(switchY, LOW);
-  Serial.println("Dark Class Room - Table B 2016/08/16 iLYuSha Wakaka KocmocA");
+  Serial.println("Dark Class Room - Table B 2016/08/21 iLYuSha Wakaka KocmocA");
 }
 
 int block = 2; //this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
