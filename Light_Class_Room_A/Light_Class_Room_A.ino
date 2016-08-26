@@ -1,8 +1,8 @@
 /******************************************
-  Title: Ghost Class Room B
+  Title: Light Class Room A
   Studio: Wakaka KocmocA & 0escape
   Author: By iLYuSha Wakaka KocmocA
-  2016/08/06
+  2016/08/26
 *******************************************/
 /******************************************
   PURPOSE:  Learn to use the MF522-AN RFID card reader
@@ -30,15 +30,20 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);        // instatiate a MFRC522 reader object.
 MFRC522::MIFARE_Key key;//create a MIFARE_Key struct named 'key', which will hold the card information
 /* Constant for Chair Tag ID */
+#define SHOW_TAG_ID
 const int RFID_A[4] = {60, 73, 49, 0}; // A椅腳 RFID Tag 李嬅 3C49310
 const int RFID_B[4] = {68, 151, 230, 233}; // B椅腳 RFID Tag 佳倫 4497E6E9
 const int RFID_C[4] = {112, 186, 28, 51}; // C椅腳 RFID Tag 王廷 70BA1C33
 const int RFID_D[4] = {64, 70, 44, 51}; // D椅腳 RFID Tag 廖毛 40462C33
+const int RFID_W[4] = {79, 179, 52, 0}; // 萬用W椅腳 RFID Tag 4FB3340
+const int RFID_X[4] = {27, 79, 50, 0}; // 萬用X椅腳 RFID Tag 1B4F320
+const int RFID_Y[4] = {160, 59, 44, 51}; // 萬用Y椅腳 RFID Tag A03B2C33
+const int RFID_Z[4] = {235, 12, 49, 0}; // 萬用Z椅腳 RFID Tag EBC310
 /* Output */
 const int teacherDoor = 2; // 教職員門
 const int secretDoor = 3; // 暗門
-const int msgA2B = 4; // 語音 A觸發B
-const int msgC2B = 5; // 語音 C觸發B
+const int msgB2A = 4; // 語音 B觸發A
+const int msgD2A = 5; // 語音 D觸發A
 /* Variable */
 unsigned long timerStart; // 計時器開始時間
 unsigned long timerOut; // 延遲結束時間
@@ -63,13 +68,13 @@ void setup() {
 
   pinMode(teacherDoor, OUTPUT);
   pinMode(secretDoor, OUTPUT);
-  pinMode(msgA2B, OUTPUT);
-  pinMode(msgC2B, OUTPUT);
+  pinMode(msgB2A, OUTPUT);
+  pinMode(msgD2A, OUTPUT);
   digitalWrite(teacherDoor, LOW);
   digitalWrite(secretDoor, LOW);
-  digitalWrite(msgA2B, HIGH);
-  digitalWrite(msgC2B, HIGH);
-  Serial.println("Ghost Class Room B 2016/08/06 iLYuSha Wakaka KocmocA");
+  digitalWrite(msgB2A, HIGH);
+  digitalWrite(msgD2A, HIGH);
+  Serial.println("Light Class Room A 2016/08/26 iLYuSha Wakaka KocmocA");
 }
 
 int block = 2; //this is the block number we will write into and then read. Do not write into 'sector trailer' block, since this can make the block unusable.
@@ -89,6 +94,19 @@ void Play()
     timerOut = timerStart + msgDelay;
   }
 }
+void ShowTagID()
+{
+  #ifdef SHOW_TAG_ID
+  Serial.print("Tag ID: ");
+  Serial.print(mfrc522.uid.uidByte[0]);
+  Serial.print(" , ");
+  Serial.print(mfrc522.uid.uidByte[1]);
+  Serial.print(" , ");
+  Serial.print(mfrc522.uid.uidByte[2]);
+  Serial.print(" , ");
+  Serial.println(mfrc522.uid.uidByte[3]);
+  #endif
+}
 void loop()
 {
   ///////////////////////////////////////
@@ -106,52 +124,94 @@ void loop()
   if(play && millis() > timerOut)
   {
      play = false;
-     digitalWrite(msgA2B, HIGH);
-     digitalWrite(msgC2B, HIGH);
+     digitalWrite(msgB2A, HIGH);
+     digitalWrite(msgD2A, HIGH);
   }
-
-  // A椅子 放 B位置 觸發 -> 語音播放 -> 進入B位置語音10秒延時
-  if (mfrc522.uid.uidByte[0] == RFID_A[0] && mfrc522.uid.uidByte[1] == RFID_A[1] && mfrc522.uid.uidByte[2] == RFID_A[2] && mfrc522.uid.uidByte[3] == RFID_A[3])
+  
+  if(escape == -1)
   {
-    digitalWrite(msgA2B, LOW);
-    Play();
-  }
+    ShowTagID();
 
-  // B椅子 放 B位置 觸發 -> 中控機關 -> 判斷教職員門開啟
-  else if (mfrc522.uid.uidByte[0] == RFID_B[0] && mfrc522.uid.uidByte[1] == RFID_B[1] && mfrc522.uid.uidByte[2] == RFID_B[2] && mfrc522.uid.uidByte[3] == RFID_B[3])
-  {
-    digitalWrite(teacherDoor, HIGH); // 發送教職員門開啟訊號
-  }
-
-  // C椅子 放 B位置 觸發 -> 語音播放 -> 進入B位置語音10秒延時
-  if (mfrc522.uid.uidByte[0] == RFID_C[0] && mfrc522.uid.uidByte[1] == RFID_C[1] && mfrc522.uid.uidByte[2] == RFID_C[2] && mfrc522.uid.uidByte[3] == RFID_C[3])
-  {
-    digitalWrite(msgC2B, LOW);
-    Play();
-  }
-
-  // D椅子 放 B位置 觸發 -> 中控機關 -> 判斷暗門開啟
-  if (mfrc522.uid.uidByte[0] == RFID_D[0] && mfrc522.uid.uidByte[1] == RFID_D[1] && mfrc522.uid.uidByte[2] == RFID_D[2] && mfrc522.uid.uidByte[3] == RFID_D[3])
-  {
-    digitalWrite(secretDoor, HIGH); // 發送暗門開啟訊號
-  }
-
-  // 椅子拿起來 -> 恢復訊號
-  else
-  {
-    if(escape > 1)
+    // A椅子 放 A位置 觸發 -> 中控機關 -> 判斷教職員門開啟
+    if (mfrc522.uid.uidByte[0] == RFID_A[0] && mfrc522.uid.uidByte[1] == RFID_A[1] && mfrc522.uid.uidByte[2] == RFID_A[2] && mfrc522.uid.uidByte[3] == RFID_A[3])
     {
-      digitalWrite(teacherDoor, LOW);
-      digitalWrite(secretDoor, LOW);
+      digitalWrite(teacherDoor, HIGH); // 發送教職員門開啟訊號
+      Serial.print("A Bingo ");
+      ShowTagID();
+    }
+    
+    // B椅子 放 A位置 觸發 -> 語音播放 -> 進入A位置語音10秒延時
+    else if (mfrc522.uid.uidByte[0] == RFID_B[0] && mfrc522.uid.uidByte[1] == RFID_B[1] && mfrc522.uid.uidByte[2] == RFID_B[2] && mfrc522.uid.uidByte[3] == RFID_B[3])
+    {
+      digitalWrite(msgB2A, LOW);
+      Play();
+      Serial.print("B Bingo ");
+      ShowTagID();
+    }
+    
+    // C椅子 放 A位置 觸發 -> 中控機關 -> 判斷暗門開啟
+    else if (mfrc522.uid.uidByte[0] == RFID_C[0] && mfrc522.uid.uidByte[1] == RFID_C[1] && mfrc522.uid.uidByte[2] == RFID_C[2] && mfrc522.uid.uidByte[3] == RFID_C[3])
+    {
+      digitalWrite(secretDoor, HIGH); // 發送暗門開啟訊號
+      Serial.print("C Bingo ");
+      ShowTagID();
+    }
+    
+    // D椅子 放 A位置 觸發 -> 語音 -> 進入A位置語音10秒延時
+    else if (mfrc522.uid.uidByte[0] == RFID_D[0] && mfrc522.uid.uidByte[1] == RFID_D[1] && mfrc522.uid.uidByte[2] == RFID_D[2] && mfrc522.uid.uidByte[3] == RFID_D[3])
+    {
+      digitalWrite(msgD2A, LOW);
+      Play();
+      Serial.print("D Bingo ");
+      ShowTagID();
+    }
+
+    // 萬用椅子作弊
+    else if (mfrc522.uid.uidByte[0] == RFID_W[0] && mfrc522.uid.uidByte[1] == RFID_W[1] && mfrc522.uid.uidByte[2] == RFID_W[2] && mfrc522.uid.uidByte[3] == RFID_W[3])
+    {
+      digitalWrite(teacherDoor, HIGH);
+      digitalWrite(secretDoor, HIGH);
+      Serial.print("Cheat W Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_X[0] && mfrc522.uid.uidByte[1] == RFID_X[1] && mfrc522.uid.uidByte[2] == RFID_X[2] && mfrc522.uid.uidByte[3] == RFID_X[3])
+    {
+      digitalWrite(teacherDoor, HIGH);
+      digitalWrite(secretDoor, HIGH);
+      Serial.print("Cheat X Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_Y[0] && mfrc522.uid.uidByte[1] == RFID_Y[1] && mfrc522.uid.uidByte[2] == RFID_Y[2] && mfrc522.uid.uidByte[3] == RFID_Y[3])
+    {
+      digitalWrite(teacherDoor, HIGH);
+      digitalWrite(secretDoor, HIGH);
+      Serial.print("Cheat Y Bingo ");
+      ShowTagID();
+    }
+    else if (mfrc522.uid.uidByte[0] == RFID_Z[0] && mfrc522.uid.uidByte[1] == RFID_Z[1] && mfrc522.uid.uidByte[2] == RFID_Z[2] && mfrc522.uid.uidByte[3] == RFID_Z[3])
+    {
+      digitalWrite(teacherDoor, HIGH);
+      digitalWrite(secretDoor, HIGH);
+      Serial.print("Cheat Z Bingo ");
+      ShowTagID();
     }
   }
 
-  mfrc522.uid.uidByte[0] = -2;
-  mfrc522.uid.uidByte[1] = -2;
-  mfrc522.uid.uidByte[2] = -2;
-  mfrc522.uid.uidByte[3] = -2;
-
-
+  /********************************************* 
+   *  Important!!! escape每次迴圈都會+1
+   *  Arduino RFID 第一次進入迴圈會確認Tag並讀取(escape = -1)
+   *  Arduino RFID 第二次進入迴圈【一定】會return跳出(escape = 0)
+   *  故判斷Tag離開會在第三次進入迴圈
+   *  此時如果Tag仍留著，escape = -1
+   *  反之，escape = 1
+   *  所以第四次迴圈判斷條件如下
+  **********************************************/
+  // 椅子拿起來 -> 恢復訊號
+  else if(escape > 0)
+  {
+    digitalWrite(teacherDoor, LOW);
+    digitalWrite(secretDoor, LOW);
+  }
   /*****************************************establishing contact with a tag/card**********************************************************************/
 
   // Look for new cards (in case you wonder what PICC means: proximity integrated circuit card)
@@ -159,7 +219,7 @@ void loop()
     escape++;
     return;//if it did not find a new card is returns a '0' and we return to the start of the loop
   }
-  escape = 0;
+  escape = -1;
 
   // Select one of the cards
   if ( ! mfrc522.PICC_ReadCardSerial()) {//if PICC_ReadCardSerial returns 1, the "uid" struct (see MFRC522.h lines 238-45)) contains the ID of the read card.

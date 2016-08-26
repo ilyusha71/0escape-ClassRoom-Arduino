@@ -24,6 +24,7 @@ void setup() {
   digitalWrite(turnstile,LOW);
   digitalWrite(sound,HIGH);
   Serial.println("Passage Turnstile Controller 2016/08/20 iLYuSha Wakaka KocmocA");
+  delay(3000);
 }
 void loop() {
 
