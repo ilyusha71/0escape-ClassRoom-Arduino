@@ -236,7 +236,7 @@ void loop()
   //byte    sak;      // The SAK (Select acknowledge) byte returned from the PICC after successful selection.
   //} Uid;
 
-  Serial.println("card selected");
+  //Serial.println("card selected");
 
   /*****************************************writing and reading a block on the card**********************************************************************/
 
